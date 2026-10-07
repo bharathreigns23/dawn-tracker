@@ -1,0 +1,698 @@
+:root {
+    --color-primary: #2e9e5b;
+    --color-primary-dark: #247a47;
+    --color-bg: #f6faf7;
+    --color-card: #ffffff;
+    --color-text: #1f2a24;
+    --color-muted: #6b7a72;
+    --color-done: #4cc77f;
+    --color-missed: #f4b6b6;
+    --color-future: #e6e9e7;
+    --color-border: #dfe6e1;
+    --color-error: #eb5757;
+    --color-warn: #f2c94c;
+}
+
+[data-theme="dark"] {
+    --color-primary: #38b068;
+    --color-primary-dark: #45cc7b;
+    --color-bg: #121614;
+    --color-card: #1c221e;
+    --color-text: #e6eae7;
+    --color-muted: #9aa7a0;
+    --color-done: #256641;
+    --color-missed: #662e2e;
+    --color-future: #2a332d;
+    --color-border: #333d37;
+    --color-error: #cc4747;
+    --color-warn: #c29d38;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+[data-theme="dark"] body {
+    background-image: url('bg-dark.jpg');
+}
+
+body {
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    background-color: var(--color-bg);
+    background-image: url('bg-light.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    color: var(--color-text);
+    margin: 0;
+    padding: 16px;
+    line-height: 1.5;
+    transition: background-image 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Layout */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto 20px auto;
+}
+
+.header-controls {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+h1 {
+    font-size: 1.75rem;
+    font-weight: bold;
+    margin: 0;
+}
+
+.month-selector {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.month-selector button {
+    cursor: pointer;
+    background: var(--color-card);
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.month-selector button:hover {
+    background-color: var(--color-future);
+}
+
+.month-selector button:active {
+    transform: translateY(1px);
+}
+
+/* Theme Toggle Switch */
+.theme-switch {
+    display: inline-block;
+    position: relative;
+    width: 80px;
+    height: 40px;
+    border-radius: 40px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.theme-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    position: absolute;
+}
+
+.theme-switch-track {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 40px;
+    background: linear-gradient(to right, #54a5f3, #72c5fb);
+    box-shadow: inset 0 2px 6px rgba(0,0,0,0.2);
+    overflow: hidden;
+    transition: background 0.4s ease;
+}
+
+/* Clouds for Light Mode */
+.clouds {
+    position: absolute;
+    bottom: -10px;
+    right: -10px;
+    width: 100%;
+    height: 100%;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+.clouds::before, .clouds::after {
+    content: '';
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    opacity: 0.9;
+}
+.clouds::before {
+    width: 40px;
+    height: 40px;
+    bottom: -5px;
+    right: 25px;
+    box-shadow: -20px 5px 0 10px white, -45px 15px 0 5px white;
+}
+.clouds::after {
+    width: 35px;
+    height: 35px;
+    bottom: -5px;
+    right: -5px;
+}
+
+/* Stars for Dark Mode */
+.stars {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+.stars::before, .stars::after {
+    content: '✦';
+    position: absolute;
+    color: white;
+    font-size: 10px;
+}
+.stars::before {
+    top: 8px; left: 15px;
+    text-shadow: 15px 15px 0 white, -5px 20px 0 white;
+}
+.stars::after {
+    top: 25px; left: 25px;
+    font-size: 6px;
+    text-shadow: 10px -15px 0 white, 25px -10px 0 white;
+}
+
+/* Sun / Moon Handle */
+.sun-moon-handle {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #ffd93b;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2), inset 0 -2px 0 rgba(0,0,0,0.1);
+    transition: transform 0.4s cubic-bezier(0.4, 0.0, 0.2, 1), background 0.4s ease;
+    overflow: hidden;
+    z-index: 2;
+}
+
+/* Moon Craters */
+.craters {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+.craters::before, .craters::after {
+    content: '';
+    position: absolute;
+    background: rgba(0,0,0,0.15);
+    border-radius: 50%;
+}
+.craters::before {
+    width: 8px; height: 8px;
+    top: 8px; left: 16px;
+    box-shadow: -6px 8px 0 2px rgba(0,0,0,0.15);
+}
+.craters::after {
+    width: 6px; height: 6px;
+    top: 20px; left: 22px;
+}
+
+/* Dark Mode State */
+.theme-switch input:checked + .theme-switch-track {
+    background: linear-gradient(to right, #1f2231, #31384e);
+}
+
+.theme-switch input:checked + .theme-switch-track .clouds {
+    opacity: 0;
+    transform: translateY(10px);
+}
+
+.theme-switch input:checked + .theme-switch-track .stars {
+    opacity: 1;
+}
+
+.theme-switch input:checked + .theme-switch-track .sun-moon-handle {
+    transform: translateX(40px) rotate(360deg);
+    background: #c3cbd5;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3), inset -2px -2px 0 rgba(0,0,0,0.1);
+}
+
+.theme-switch input:checked + .theme-switch-track .craters {
+    opacity: 1;
+}
+
+/* Focus styles for accessibility */
+.theme-switch input:focus-visible + .theme-switch-track {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+/* Cards - Liquid Glass */
+.card {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15);
+    padding: 20px;
+    margin-bottom: 20px;
+    transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+[data-theme="dark"] .card {
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+}
+
+/* Summary Card */
+.summary-card {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.summary-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 45%;
+}
+
+.summary-label {
+    color: var(--color-muted);
+    font-size: 0.9rem;
+}
+
+.summary-value {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.progress-bar-container {
+    width: 100%;
+    height: 8px;
+    background-color: var(--color-future);
+    border-radius: 4px;
+    margin-top: 8px;
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background-color: var(--color-primary);
+    width: 0%;
+    transition: width 0.3s ease;
+}
+
+/* Habit Management */
+.habit-management {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.habit-management input {
+    flex-grow: 1;
+    padding: 10px 12px;
+    border: 1px solid var(--color-border);
+    background-color: var(--color-card);
+    color: var(--color-text);
+    border-radius: 8px;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s, background-color 0.3s ease, color 0.3s ease;
+}
+
+@media (max-width: 600px) {
+    .habit-management input {
+        font-size: 16px;
+    }
+}
+
+.habit-management input:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 2px rgba(46, 158, 91, 0.2);
+}
+
+.btn-primary {
+    background-color: var(--color-primary);
+    color: white;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: 1rem;
+    cursor: pointer;
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.btn-primary:hover {
+    background-color: var(--color-primary-dark);
+}
+
+.btn-primary:active {
+    transform: translateY(1px);
+}
+
+.error {
+    color: var(--color-error);
+    font-size: 0.85rem;
+    width: 100%;
+    margin-top: 5px;
+}
+
+/* Tracker Table */
+.tracker-card {
+    padding: 0;
+    overflow: hidden;
+}
+
+.tracker-container {
+    overflow-x: auto;
+    width: 100%;
+}
+
+table {
+    border-collapse: separate;
+    border-spacing: 0;
+    width: 100%;
+    font-size: 0.9rem;
+    border-radius: 12px;
+}
+
+th, td {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 8px 4px;
+    text-align: center;
+    min-width: 32px;
+    height: 32px;
+    position: relative;
+    transition: background-color 0.3s ease;
+}
+
+th.habit-name-col, td.habit-name-col {
+    text-align: left;
+    min-width: 180px;
+    padding-left: 16px;
+    padding-right: 16px;
+    font-weight: bold;
+    z-index: 2;
+}
+
+/* Table Header */
+th.day-header {
+    background-color: var(--color-card);
+}
+
+.day-number {
+    font-weight: bold;
+}
+
+.weekday {
+    color: var(--color-muted);
+    font-size: 0.75rem;
+}
+
+/* Today styles */
+th.today-col, td.today-col {
+    outline: 2px solid var(--color-primary);
+    outline-offset: -2px;
+    z-index: 1;
+}
+
+th.today-col {
+    background-color: rgba(46, 158, 91, 0.15);
+}
+
+/* Checkbox Cells */
+.ticked {
+    background-color: var(--color-done);
+}
+
+.unticked-past {
+    background-color: var(--color-missed);
+}
+
+.future {
+    background-color: var(--color-future);
+}
+
+input[type="checkbox"] {
+    cursor: pointer;
+    accent-color: var(--color-primary);
+    width: 18px;
+    height: 18px;
+}
+
+input[type="checkbox"]:disabled {
+    cursor: not-allowed;
+}
+
+/* Percent Cells */
+.percent-cell {
+    position: relative;
+    font-weight: 600;
+}
+
+.percent-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    z-index: 0;
+    opacity: 0.3;
+    transition: width 0.3s ease-out, background-color 0.3s;
+}
+
+.percent-text {
+    position: relative;
+    z-index: 1;
+}
+
+/* Habit Name and Delete Button */
+td.habit-name-col {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.habit-name-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+
+.habit-name-text {
+    flex-grow: 1;
+    cursor: pointer;
+    text-align: left;
+    line-height: 1.2;
+    word-break: break-word;
+}
+
+.delete-btn {
+    cursor: pointer;
+    color: var(--color-muted);
+    border: none;
+    background: var(--color-bg);
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0.6;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.delete-btn:hover {
+    opacity: 1;
+    color: white;
+    background-color: var(--color-error);
+    box-shadow: 0 4px 8px rgba(235, 87, 87, 0.3);
+    transform: scale(1.1);
+}
+
+/* Zebra Striping */
+tbody tr:nth-child(even) td.habit-name-col,
+tbody tr:nth-child(even) td {
+    background-color: rgba(128, 128, 128, 0.04);
+}
+
+tbody tr:nth-child(even) td.ticked {
+    background-color: var(--color-done);
+}
+
+tbody tr:nth-child(even) td.unticked-past {
+    background-color: var(--color-missed);
+}
+
+tbody tr:nth-child(even) td.future {
+    background-color: var(--color-future);
+}
+
+/* Focus outlines */
+*:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* Responsiveness */
+@media (max-width: 900px) {
+    .app-header {
+        flex-direction: column;
+        gap: 15px;
+    }
+}
+
+@media (max-width: 600px) {
+    .summary-card {
+        flex-direction: column;
+        gap: 20px;
+    }
+    
+    .summary-item {
+        width: 100%;
+    }
+    
+    .habit-management {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .btn-primary, .month-selector button, #theme-toggle {
+        min-height: 44px;
+    }
+    .month-selector button, #theme-toggle {
+        width: 44px;
+    }
+    
+    th.habit-name-col, td.habit-name-col {
+        position: sticky;
+        left: 0;
+        background-color: var(--color-card) !important;
+        box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    }
+}
+
+
+
+
+
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+
+/* Logo Styles */
+.logo-container {
+    margin: 0;
+    display: flex;
+    align-items: center;
+}
+
+.app-logo {
+    height: 180px;
+    width: auto;
+    object-fit: contain;
+    mix-blend-mode: multiply;
+    transition: filter 0.3s ease, transform 0.3s ease;
+    transform: scale(1.3);
+    margin: -30px 0;
+}
+
+[data-theme='dark'] .app-logo {
+    filter: invert(1);
+    mix-blend-mode: screen;
+}
+
+
+
+/* Daily Done Row */
+.daily-done-row td {
+    background-color: rgba(0, 0, 0, 0.7) !important;
+    font-weight: bold;
+    color: white;
+}
+
+/* Gray out before first tick */
+.before-first-tick {
+    background-color: rgba(128, 128, 128, 0.15) !important;
+}
+
+/* Secondary Button Style */
+.btn-secondary {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: 1rem;
+    cursor: pointer;
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s, transform 0.1s;
+    margin: 0;
+}
+.btn-secondary:hover {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+:root {
+    --color-missed: #f8c8c8; /* softer red */
+}
+[data-theme='dark'] {
+    --color-missed: #522b2b; /* softer red for dark mode */
+}
+
+/* Today unticked light */
+td.today-col:not(.ticked) {
+    background-color: rgba(255, 255, 255, 0.3) !important;
+}
+[data-theme='dark'] td.today-col:not(.ticked) {
+    background-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+/* Delete Button changes */
+.delete-btn {
+    width: 20px !important;
+    height: 20px !important;
+    opacity: 0.4 !important;
+}
+.delete-btn:hover {
+    opacity: 1 !important;
+    color: white !important;
+    background-color: #ff4444 !important;
+}
